@@ -24,19 +24,20 @@ pipeline {
     }
 
     stage('Build Backend Image') {
-      steps {
-        dir('backend') {
-          sh '''
-          docker run --rm \
-            -v "$PWD":/app \
-            -w /app \
-            maven:3.9.9-eclipse-temurin-21 \
-            mvn clean package -DskipTests
-          '''
-          sh 'docker build -t hms-backend .'
+        steps {
+            dir('backend') {
+            sh '''
+            docker run --rm \
+                -v "$PWD/hms-spring-backend":/app \
+                -w /app \
+                maven:3.9.9-eclipse-temurin-21 \
+                mvn clean package -DskipTests
+            '''
+            sh 'docker build -t hms-backend hms-spring-backend'
+            }
         }
-      }
     }
+
 
     stage('Clone Frontend') {
       steps {
