@@ -24,8 +24,10 @@ pipeline {
     }
 
 stage('Build Backend') {
-    dir('backend/hms-spring-backend') {
-        sh 'mvn clean package -DskipTests'
+    steps {
+        dir('backend/hms-spring-backend') {
+            sh 'mvn clean package -DskipTests'
+        }
     }
 }
 
