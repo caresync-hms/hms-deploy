@@ -7,11 +7,9 @@ pipeline {
 
   stages {
 
-    stage('Clone Deploy Repo') {
+    stage('Prepare Workspace') {
       steps {
-        git branch: 'main',
-            url: 'https://github.com/caresync-hms/hms-deploy.git',
-            credentialsId: 'github-token'
+        deleteDir()
       }
     }
 
