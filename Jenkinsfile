@@ -1,7 +1,19 @@
 pipeline {
   agent any
 
+  options {
+    skipDefaultCheckout(true)
+  }
+
   stages {
+
+    stage('Clone Deploy Repo') {
+      steps {
+        git branch: 'main',
+            url: 'https://github.com/caresync-hms/hms-deploy.git',
+            credentialsId: 'github-token'
+      }
+    }
 
     stage('Clone Backend') {
       steps {
@@ -17,12 +29,12 @@ pipeline {
       steps {
         dir('backend') {
           sh '''
-            docker run --rm \
+          docker run --rm \
             -v "$PWD":/app \
             -w /app \
             maven:3.9.9-eclipse-temurin-21 \
             mvn clean package -DskipTests
-            '''
+          '''
           sh 'docker build -t hms-backend .'
         }
       }
@@ -48,7 +60,7 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        sh 'docker-compose down'
+        sh 'docker-compose down || true'
         sh 'docker-compose up -d'
       }
     }
