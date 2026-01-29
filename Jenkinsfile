@@ -16,7 +16,13 @@ pipeline {
     stage('Build Backend Image') {
       steps {
         dir('backend') {
-          sh 'mvn clean package -DskipTests'
+          sh '''
+            docker run --rm \
+            -v "$PWD":/app \
+            -w /app \
+            maven:3.9.9-eclipse-temurin-21 \
+            mvn clean package -DskipTests
+            '''
           sh 'docker build -t hms-backend .'
         }
       }
