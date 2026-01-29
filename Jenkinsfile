@@ -23,13 +23,10 @@ pipeline {
       }
     }
 
-    stage('Build Backend Image') {
-  steps {
+stage('Build Backend') {
     dir('backend/hms-spring-backend') {
-      sh 'mvn clean package -DskipTests'
-      sh 'docker build -t hms-backend .'
+        sh 'mvn clean package -DskipTests'
     }
-  }
 }
 
 
