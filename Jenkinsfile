@@ -6,7 +6,9 @@ pipeline {
     stage('Clone Backend') {
       steps {
         dir('backend') {
-          git 'https://github.com/caresync-hms/hms-backend.git'
+          git branch: 'main',
+              url: 'https://github.com/caresync-hms/hms-backend.git',
+              credentialsId: 'github-token'
         }
       }
     }
@@ -23,7 +25,9 @@ pipeline {
     stage('Clone Frontend') {
       steps {
         dir('frontend') {
-          git 'https://github.com/caresync-hms/hms-frontend.git'
+          git branch: 'main',
+              url: 'https://github.com/caresync-hms/hms-frontend.git',
+              credentialsId: 'github-token'
         }
       }
     }
@@ -38,11 +42,8 @@ pipeline {
 
     stage('Deploy') {
       steps {
-        dir('deploy') {
-          git 'https://github.com/caresync-hms/hms-deploy.git'
-          sh 'docker-compose down'
-          sh 'docker-compose up -d'
-        }
+        sh 'docker-compose down'
+        sh 'docker-compose up -d'
       }
     }
   }
