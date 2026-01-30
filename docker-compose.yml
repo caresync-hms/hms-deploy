@@ -2,33 +2,44 @@ version: "3.8"
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: appdb
-    command: --innodb-buffer-pool-size=128M
+      MYSQL_DATABASE: hms
     volumes:
       - mysql_data:/var/lib/mysql
-    restart: unless-stopped
+    networks:
+      - hms-net
 
   backend:
-    image: hms-backend
-    container_name: backend
-    depends_on:
-      - mysql
-    environment:
-      JAVA_OPTS: -Xms256m -Xmx512m
+    image: prathamaher/hms-backend:latest
     ports:
       - "8080:8080"
-    restart: unless-stopped
+    depends_on:
+      - mysql
+    networks:
+      - hms-net
+
+  bloodbank:
+    image: prathamaher/bloodbank-service:latest
+    ports:
+      - "5000:5000"
+    networks:
+      - hms-net
 
   frontend:
-    image: hms-frontend
-    container_name: frontend
+    image: prathamaher/hms-frontend:latest
     ports:
       - "80:80"
-    restart: unless-stopped
+    depends_on:
+      - backend
+      - bloodbank
+    networks:
+      - hms-net
 
 volumes:
   mysql_data:
+
+networks:
+  hms-net:
