@@ -21,6 +21,8 @@ services:
       MSSQL_MEMORY_LIMIT_MB: 512
     ports:
       - "1433:1433"
+    volumes:
+    - sqlserver_data:/var/opt/mssql
     networks:
       - hms-net
 
@@ -54,6 +56,7 @@ services:
 
 volumes:
   mysql_data:
+  sqlserver_data:
 
 networks:
   hms-net:
