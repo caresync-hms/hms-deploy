@@ -12,20 +12,6 @@ services:
     networks:
       - hms-net
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver
-    environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: Bloodbank@123
-      MSSQL_MEMORY_LIMIT_MB: 512
-    ports:
-      - "1433:1433"
-    volumes:
-    - sqlserver_data:/var/opt/mssql
-    networks:
-      - hms-net
-
   backend:
     image: prathamaher/hms-backend:latest
     ports:
@@ -40,7 +26,7 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - sqlserver
+      - mysql
     networks:
       - hms-net
 
@@ -56,7 +42,6 @@ services:
 
 volumes:
   mysql_data:
-  sqlserver_data:
 
 networks:
   hms-net:
