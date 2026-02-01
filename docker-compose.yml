@@ -12,6 +12,17 @@ services:
     networks:
       - hms-net
 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Bloodbank@123
+    ports:
+      - "1433:1433"
+    networks:
+      - hms-net
+
   backend:
     image: prathamaher/hms-backend:latest
     ports:
@@ -25,6 +36,8 @@ services:
     image: prathamaher/bloodbank-service:latest
     ports:
       - "5000:5000"
+    depends_on:
+      - sqlserver
     networks:
       - hms-net
 
